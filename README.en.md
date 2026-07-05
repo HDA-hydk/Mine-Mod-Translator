@@ -1,3 +1,9 @@
+<div align="right">
+
+**English** | [简体中文](README.md)
+
+</div>
+
 # Mine Mod Translator (MMT)
 
 A Minecraft mod translation tool supporting multiple loaders (Forge / Fabric / NeoForge), providing an integrated extract-translate-pack pipeline for mod localization.

@@ -1,3 +1,9 @@
+<div align="right">
+
+[English](README.en.md) | **简体中文**
+
+</div>
+
 # Mine Mod Translator (MMT)
 
 Minecraft 模组翻译工具，支持多加载器（Forge / Fabric / NeoForge），提供提取、翻译、打包一体化的模组本地化解决方案。
