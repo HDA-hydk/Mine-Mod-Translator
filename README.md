@@ -79,11 +79,10 @@ mmt/
 │   ├── extracted.json      # 已提取的语言数据
 │   ├── translated.json     # 已翻译的语言数据
 │   └── packed.json         # 已打包的语言数据
-├── ai/
-│   ├── AItranslation_*.txt     # AI 待翻译文件
-│   └── AItranslationResult_*.txt  # AI 翻译结果文件
 ├── i18n-dic/               # 词典目录（可放置 JSON 词典文件）
-└── logs/                   # 日志目录
+├── logs/                   # 日志目录
+├── AItranslation_*.txt     # AI 待翻译文件
+└── AItranslationResult_*.txt  # AI 翻译结果文件
 ```
 
 ### 命令列表
@@ -108,18 +107,16 @@ mmt/
 
 ### 快速开始
 
-1. 进入游戏世界，执行 `/mmt extract zh_cn` 提取模组文本
-2. 执行 `/mmt translate zh_cn` 使用词典和 AI 进行翻译
-3. 将 AI 翻译结果粘贴到 `AItranslationResult_zh_cn.txt`
-4. 再次执行 `/mmt translate zh_cn` 导入翻译结果
-5. 执行 `/mmt pack zh_cn` 生成资源包
+1. 进入游戏世界(此时MMT会自动提取需要翻译的内容)
+2. 打开游戏目录，找到 `mmt/AItranslation_[语言代码]_[编号].txt`
+3. 将 `mmt/AItranslation_[语言代码]_[编号].txt` 发送给AI，并等待翻译结果
+4. 复制翻译结果，粘贴并覆盖原文件的内容
+5. 执行 `/mmt auto` 自动识别翻译并打包
 6. 在游戏中启用生成的资源包
 
-或者使用一键流水线：
-
-```
-/mmt auto zh_cn
-```
+### 进阶操作
+1. **词典翻译**：前往 `https://github.com/CFPATools/i18n-dict/releases/` 下载词典文件，将词典文件放置在 `mmt/i18n-dic/` 目录下。此时MMT会优先使用词典翻译。
+2. **手动修改**: 你可以手动修改资源包里的语言文件，MMT在下次打包时不会覆盖你的修改。
 
 ### 翻译优先级
 
@@ -155,6 +152,8 @@ mmt/
 - **构建工具**：Gradle
 - **支持平台**：Minecraft 1.20.1（Forge / Fabric / NeoForge）
 
-## 许可证
+## 补充说明
+本项目由AI完成开发，且部分功能未经测试，如有问题和建议欢迎提交issue，感谢。
 
-本项目仅供学习和个人使用。
+## 声明
+本项目基于 [MIT 许可证](https://opensource.org/licenses/MIT) 开源。
