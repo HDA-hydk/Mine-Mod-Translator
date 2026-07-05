@@ -1,0 +1,49 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# Minecraft Dev
+run/
+eclipse/
+out/
+
+# Logs
+*.log
+logs/
+.testlog/
+
+# Test mods
+.testmod/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local config
+local.properties
+.gradle.properties
+
+# Project-specific
+.doc/
+i18n-dic/

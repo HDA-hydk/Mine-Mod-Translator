@@ -1,0 +1,83 @@
+// Forge 适配层
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+// 基本信息
+group = mod_group
+version = mod_version
+
+// 依赖公共层
+dependencies {
+    implementation project(':common')
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+}
+
+// Minecraft 配置
+minecraft {
+    mappings channel: 'official', version: mc_version
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            mods {
+                mmt {
+                    source sourceSets.main
+                    source project(':common').sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            mods {
+                mmt {
+                    source sourceSets.main
+                    source project(':common').sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+// 源集配置
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = java_version as int
+}
+
+// jar 任务
+jar {
+    archiveBaseName = 'mmt-forge'
+    manifest {
+        attributes([
+            'Specification-Title': mod_name,
+            'Specification-Vendor': 'MMT',
+            'Specification-Version': '1',
+            'Implementation-Title': mod_name,
+            'Implementation-Vendor': 'MMT',
+            'Implementation-Version': mod_version
+        ])
+    }
+    from project(':common').sourceSets.main.output
+}
+
+// reobfJar 用于生成可发布的 jar
+reobf {
+    jar {}
+}

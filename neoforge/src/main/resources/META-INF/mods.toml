@@ -1,0 +1,30 @@
+modLoader = "javafml" # NeoForge 加载器类型
+loaderVersion = "[47,)" # NeoForge 版本范围（1.20.1 = 47.x）
+license = "MIT" # 许可证
+
+# 模组信息
+[[mods]]
+modId = "mmt" # 模组 ID
+version = "1.0.0" # 模组版本
+displayName = "Mine Mod Translator" # 显示名称
+authors = "MMT Team" # 作者
+description = '''
+Mine Mod Translator (MMT) provides a complete translation pipeline for Minecraft mods: extract → translate → pack.
+Supports multiple translation methods: translation memory, I18n-dict, AI, machine translation.
+'''
+
+# Minecraft 版本依赖
+[[dependencies.mmt]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,1.21)"
+ordering = "NONE"
+side = "BOTH"
+
+# NeoForge 版本依赖
+[[dependencies.mmt]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"

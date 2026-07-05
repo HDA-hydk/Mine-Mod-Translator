@@ -1,0 +1,38 @@
+// 公共层：纯 Java，无加载器依赖
+plugins {
+    id 'java'
+}
+
+// 基本信息
+group = mod_group
+version = mod_version
+
+// 依赖
+dependencies {
+    // Gson - Minecraft 内置，编译时需要
+    compileOnly 'com.google.code.gson:gson:2.8.9'
+}
+
+// 源集配置
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = java_version as int
+}
+
+// 生成 jar
+jar {
+    archiveBaseName = 'mmt-common'
+    from sourceSets.main.output
+}

@@ -1,0 +1,40 @@
+// NeoForge 适配层
+plugins {
+    id 'net.neoforged.gradle.userdev' version '7.0.192'
+}
+
+// 基本信息
+group = mod_group
+version = mod_version
+
+// NeoForge Gradle 7.0 配置
+// Minecraft 版本在 gradle.properties 中通过 neoforge_version 指定
+// NeoForge 1.20.1 的版本格式是 20.1.x
+
+// 依赖
+dependencies {
+    implementation project(':common')
+    // NeoForge userdev 插件会自动添加 NeoForge 依赖，不需要手动声明
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = java_version as int
+}
+
+// jar 任务
+jar {
+    archiveBaseName = 'mmt-neoforge'
+    manifest {
+        attributes([
+            'Specification-Title': mod_name,
+            'Specification-Vendor': 'MMT',
+            'Specification-Version': '1',
+            'Implementation-Title': mod_name,
+            'Implementation-Vendor': 'MMT',
+            'Implementation-Version': mod_version
+        ])
+    }
+    from project(':common').sourceSets.main.output
+}

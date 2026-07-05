@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+// 全局配置
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(java_version as int)
+        }
+    }
+
+    // 编码设置
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    // 仓库配置
+    repositories {
+        mavenCentral()
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.neoforged.net/releases/' }
+    }
+}
+
+// 根项目不构建
+tasks.build.configure { enabled = false }
