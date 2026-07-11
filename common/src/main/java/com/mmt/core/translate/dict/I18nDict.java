@@ -42,6 +42,7 @@ public class I18nDict {
 
     public void load() {
         if (loadAttempted) {
+            reload();
             return;
         }
         loadAttempted = true;

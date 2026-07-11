@@ -60,7 +60,6 @@ public final class MmtMod {
         logger.init(debugMode);
 
         i18nManager = I18nManager.getInstance(logger);
-        updateI18nLanguage();
 
         PathHelper pathHelper = new PathHelper(adapter);
 

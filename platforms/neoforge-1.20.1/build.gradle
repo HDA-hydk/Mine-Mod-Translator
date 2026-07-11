@@ -1,0 +1,53 @@
+// NeoForge 1.20.1 适配层
+plugins {
+    id 'net.neoforged.gradle.userdev' version '7.0.80'
+}
+
+// 版本配置
+def mcVer = '1.20.1'
+def neoforgeVer = neoforge_version_1_20_1
+def javaVer = java_version_1_20_1 as int
+
+// 基本信息
+group = mod_group
+version = mod_version
+
+// 依赖
+dependencies {
+    implementation project(':common')
+    implementation "net.neoforged:neoforge:${neoforgeVer}"
+}
+
+// 源集配置
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = javaVer
+}
+
+// jar 任务
+jar {
+    archiveBaseName = 'mmt-neoforge-1.20.1'
+    manifest {
+        attributes([
+            'Specification-Title': mod_name,
+            'Specification-Vendor': 'MMT',
+            'Specification-Version': '1',
+            'Implementation-Title': mod_name,
+            'Implementation-Vendor': 'MMT',
+            'Implementation-Version': mod_version
+        ])
+    }
+    from project(':common').sourceSets.main.output
+}

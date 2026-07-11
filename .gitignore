@@ -47,3 +47,5 @@ local.properties
 # Project-specific
 .doc/
 i18n-dic/
+mmt-1.21/
+.test/

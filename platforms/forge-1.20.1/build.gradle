@@ -1,0 +1,106 @@
+// Forge 1.20.1 适配层
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+// 版本配置
+def mcVer = '1.20.1'
+def forgeVer = forge_version_1_20_1
+def javaVer = java_version_1_20_1 as int
+
+// 基本信息
+group = mod_group
+version = mod_version
+
+// 依赖公共层
+dependencies {
+    implementation project(':common')
+    minecraft "net.minecraftforge:forge:${mcVer}-${forgeVer}"
+}
+
+// Minecraft 配置
+minecraft {
+    mappings channel: 'official', version: mcVer
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            mods {
+                mmt {
+                    source sourceSets.main
+                    source project(':common').sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            mods {
+                mmt {
+                    source sourceSets.main
+                    source project(':common').sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+// 源集配置
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = javaVer
+}
+
+// jar 任务
+jar {
+    archiveBaseName = 'mmt-forge-1.20.1'
+    manifest {
+        attributes([
+            'Specification-Title': mod_name,
+            'Specification-Vendor': 'MMT',
+            'Specification-Version': '1',
+            'Implementation-Title': mod_name,
+            'Implementation-Vendor': 'MMT',
+            'Implementation-Version': mod_version
+        ])
+    }
+    from project(':common').sourceSets.main.output
+}
+
+// reobfJar 用于生成可发布的 jar
+//reobf {
+//    jar {}
+//}
+
+// Dev jar for dev environment (MMCP testing)
+task devJar(type: Jar, dependsOn: classes) {
+    archiveBaseName = 'mmt-forge-1.20.1'
+    archiveClassifier = 'dev'
+    from sourceSets.main.output
+    from project(':common').sourceSets.main.output
+    manifest {
+        attributes([
+            'Specification-Title': mod_name,
+            'Specification-Vendor': 'MMT',
+            'Specification-Version': '1',
+            'Implementation-Title': mod_name,
+            'Implementation-Vendor': 'MMT',
+            'Implementation-Version': mod_version
+        ])
+    }
+}

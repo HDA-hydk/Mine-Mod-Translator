@@ -1,0 +1,61 @@
+// Fabric 1.21 适配层
+plugins {
+    id 'fabric-loom' version '1.7.3'
+}
+
+// 版本配置
+def mcVer = '1.21'
+def fabricLoaderVer = fabric_loader_version_1_21
+def fabricApiVer = fabric_version_1_21
+def javaVer = java_version_1_21 as int
+
+group = mod_group
+version = mod_version
+
+dependencies {
+    minecraft "com.mojang:minecraft:${mcVer}"
+    mappings "net.fabricmc:yarn:${mcVer}+build.1:v2"
+    modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVer}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVer}+${mcVer}"
+
+    implementation project(':common')
+    include project(':common')
+}
+
+loom {
+    runs {
+        client {
+            client()
+            configName = 'Client'
+        }
+        server {
+            server()
+            configName = 'Server'
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = javaVer
+}
+
+jar {
+    archiveBaseName = 'mmt-fabric-1.21'
+    from project(':common').sourceSets.main.output
+}
+
+remapJar {
+    archiveBaseName = 'mmt-fabric-1.21'
+}
