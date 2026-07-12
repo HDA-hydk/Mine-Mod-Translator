@@ -16,6 +16,7 @@ import com.mmt.core.util.LangUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -456,7 +457,7 @@ public class AiFileGenerator {
         int count = 0;
         int kept = 0;
 
-        try (var stream = Files.newDirectoryStream(mmtDir, "AItranslation_" + targetLanguage + "_*.txt")) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mmtDir, "AItranslation_" + targetLanguage + "_*.txt")) {
             for (Path file : stream) {
                 AiTranslationStatus status = parser.parseStatus(file);
                 if (status == AiTranslationStatus.TRANSLATED) {
@@ -488,7 +489,7 @@ public class AiFileGenerator {
         if (!Files.exists(mmtDir)) {
             return 0;
         }
-        try (var stream = Files.newDirectoryStream(mmtDir, "AItranslation_" + targetLanguage + "_*.txt")) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mmtDir, "AItranslation_" + targetLanguage + "_*.txt")) {
             for (Path file : stream) {
                 Matcher m = AI_FILE_PATTERN.matcher(file.getFileName().toString());
                 if (m.matches()) {

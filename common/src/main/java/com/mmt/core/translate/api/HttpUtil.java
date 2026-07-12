@@ -2,18 +2,18 @@ package com.mmt.core.translate.api;
 
 import com.mmt.core.log.MmtLogger;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class HttpUtil {
-    private static final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
-            .build();
+    private static final int CONNECT_TIMEOUT_MS = 10000;
 
     private final MmtLogger logger;
     private final int timeoutSeconds;
@@ -28,36 +28,69 @@ public class HttpUtil {
     }
 
     public String postJson(String url, String jsonBody, Map<String, String> headers) throws ApiException {
+        HttpURLConnection conn = null;
         try {
-            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .timeout(Duration.ofSeconds(timeoutSeconds))
-                    .header("Content-Type", "application/json");
+            URL apiUrl = new URL(url);
+            conn = (HttpURLConnection) apiUrl.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(CONNECT_TIMEOUT_MS);
+            conn.setReadTimeout(timeoutSeconds * 1000);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json");
 
             if (headers != null) {
-                headers.forEach(requestBuilder::header);
+                for (Map.Entry<String, String> entry : headers.entrySet()) {
+                    conn.setRequestProperty(entry.getKey(), entry.getValue());
+                }
             }
 
-            HttpRequest request = requestBuilder.POST(HttpRequest.BodyPublishers.ofString(jsonBody)).build();
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(jsonBody.getBytes(StandardCharsets.UTF_8));
+                os.flush();
+            }
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = conn.getResponseCode();
 
-            int statusCode = response.statusCode();
+            String responseBody;
+            InputStream stream = (statusCode >= 400) ? conn.getErrorStream() : conn.getInputStream();
+            responseBody = readStream(stream);
+
             if (statusCode == 200) {
-                return response.body();
+                return responseBody;
             } else if (statusCode == 429) {
                 throw new ApiException("Rate limited (429)", ApiException.Type.RATE_LIMITED);
             } else if (statusCode >= 500) {
                 throw new ApiException("Server error (" + statusCode + ")", ApiException.Type.SERVER_ERROR);
             } else if (statusCode >= 400) {
-                throw new ApiException("Client error (" + statusCode + "): " + response.body(), ApiException.Type.CLIENT_ERROR);
+                throw new ApiException("Client error (" + statusCode + "): " + responseBody, ApiException.Type.CLIENT_ERROR);
             } else {
                 throw new ApiException("Unexpected status code: " + statusCode, ApiException.Type.UNKNOWN);
             }
-        } catch (java.net.http.HttpTimeoutException e) {
+        } catch (SocketTimeoutException e) {
             throw new ApiException("Request timed out", ApiException.Type.TIMEOUT, e);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             throw new ApiException("Network error", ApiException.Type.NETWORK_ERROR, e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
+
+    private String readStream(InputStream is) throws IOException {
+        if (is == null) {
+            return "";
+        }
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = is.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            return new String(baos.toByteArray(), StandardCharsets.UTF_8);
+        } finally {
+            is.close();
         }
     }
 

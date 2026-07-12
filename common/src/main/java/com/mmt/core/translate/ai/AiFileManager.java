@@ -4,6 +4,7 @@ import com.mmt.core.data.path.PathHelper;
 import com.mmt.core.log.MmtLogger;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -115,7 +116,7 @@ public class AiFileManager {
 
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
         Path failedFile = failedDir.resolve("failed_" + targetLanguage + "_" + timestamp + ".txt");
-        Files.writeString(failedFile, content);
+        Files.write(failedFile, content.getBytes(StandardCharsets.UTF_8));
         logger.warn("Saved failed paste to: " + failedFile.getFileName());
     }
 }

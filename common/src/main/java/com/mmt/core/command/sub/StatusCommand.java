@@ -51,7 +51,7 @@ public class StatusCommand implements ICommand {
         int extractedCount = 0;
         Map<String, ExtractedModData> extractedMods = extractedData.get(targetLang);
         if (extractedMods != null) {
-            for (var mod : extractedMods.values()) {
+            for (ExtractedModData mod : extractedMods.values()) {
                 extractedCount += mod.getEntries().size();
             }
         }

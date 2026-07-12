@@ -14,6 +14,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DictCommand implements ICommand {
     private static final String MINI_DICT_URL = "https://raw.githubusercontent.com/CFPAOrg/i18n-dict/main/Dict-Mini.json";
@@ -63,10 +66,10 @@ public class DictCommand implements ICommand {
         int fileCount = 0;
         long totalSize = 0;
         if (Files.exists(dictDir)) {
-            try (var stream = Files.list(dictDir)) {
-                var files = stream.filter(Files::isRegularFile)
+            try (Stream<Path> stream = Files.list(dictDir)) {
+                List<Path> files = stream.filter(Files::isRegularFile)
                         .filter(p -> p.getFileName().toString().toLowerCase().endsWith(".json"))
-                        .toList();
+                        .collect(Collectors.toList());
                 fileCount = files.size();
                 for (Path f : files) {
                     try {

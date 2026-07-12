@@ -8,8 +8,10 @@ import com.mmt.core.data.model.packed.PackedData;
 import com.mmt.core.data.model.translated.TranslatedData;
 import com.mmt.core.util.LangUtil;
 
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class ClearCommand implements ICommand {
     @Override
@@ -111,7 +113,7 @@ public class ClearCommand implements ICommand {
 
     private void clearAiFiles(CommandContext context, String targetLang) throws Exception {
         Path mmtDir = context.getPathHelper().getMmtDir();
-        try (var stream = Files.newDirectoryStream(mmtDir, "AItranslation_" + targetLang + "_*.txt")) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mmtDir, "AItranslation_" + targetLang + "_*.txt")) {
             for (Path file : stream) {
                 try {
                     Files.delete(file);
@@ -129,7 +131,7 @@ public class ClearCommand implements ICommand {
 
     private void deleteDirectory(Path dir) throws Exception {
         if (Files.isDirectory(dir)) {
-            try (var stream = Files.list(dir)) {
+            try (Stream<Path> stream = Files.list(dir)) {
                 stream.forEach(p -> {
                     try {
                         deleteDirectory(p);

@@ -2,6 +2,7 @@ package com.mmt.core.translate.ai;
 
 import com.mmt.core.log.MmtLogger;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -25,7 +26,7 @@ public class AiFileParser {
 
     public ParsedResult parse(Path file) {
         try {
-            String content = Files.readString(file);
+            String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
             return parseContent(content);
         } catch (Exception e) {
             logger.error("Failed to read AI translation file: " + file, e);
@@ -118,7 +119,7 @@ public class AiFileParser {
 
     public AiTranslationStatus parseStatus(Path file) {
         try {
-            String content = Files.readString(file);
+            String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
             String[] lines = content.split("\\r?\\n");
 
             boolean foundStatus = false;

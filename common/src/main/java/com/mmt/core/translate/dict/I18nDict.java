@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class I18nDict {
@@ -65,7 +66,7 @@ public class I18nDict {
                     .filter(Files::isRegularFile)
                     .filter(p -> p.getFileName().toString().toLowerCase().endsWith(".json"))
                     .sorted()
-                    .toList();
+                    .collect(Collectors.toList());
 
             if (jsonFiles.isEmpty()) {
                 logger.info("No dictionary files found in " + dictDir);

@@ -213,7 +213,7 @@ public class Packer {
 
         if (mods != null) {
             for (PackedModData modData : mods.values()) {
-                for (var entry : modData.getEntries().values()) {
+                for (PackedEntry entry : modData.getEntries().values()) {
                     totalEntries++;
                     String method = entry.getMethod();
                     methodCounts.merge(method, 1, Integer::sum);

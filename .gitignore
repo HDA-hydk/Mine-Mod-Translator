@@ -48,4 +48,5 @@ local.properties
 .doc/
 i18n-dic/
 mmt-1.21/
+mmt-1.16/
 .test/

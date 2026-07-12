@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public class ResourcePackGenerator {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -173,7 +174,7 @@ public class ResourcePackGenerator {
                 return existingLangFiles;
             }
 
-            try (var walk = Files.walk(assetsDir)) {
+            try (Stream<Path> walk = Files.walk(assetsDir)) {
                 String jsonName = targetLanguage + ".json";
                 String langName = targetLanguage + ".lang";
                 walk.filter(p -> p.getFileName().toString().equals(jsonName)

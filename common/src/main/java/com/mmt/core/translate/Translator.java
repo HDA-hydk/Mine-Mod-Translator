@@ -311,7 +311,7 @@ public class Translator {
         Map<String, TranslatedModData> mods = translatedData.get(targetLanguage);
         if (mods != null) {
             for (TranslatedModData modData : mods.values()) {
-                for (var entry : modData.getEntries().values()) {
+                for (TranslatedEntry entry : modData.getEntries().values()) {
                     totalEntries++;
                     String method = entry.getMethod();
                     methodCounts.merge(method, 1, Integer::sum);

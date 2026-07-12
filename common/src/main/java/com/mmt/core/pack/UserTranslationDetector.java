@@ -8,6 +8,7 @@ import com.mmt.core.data.model.translated.TranslatedModData;
 import com.mmt.core.log.MmtLogger;
 import com.mmt.core.util.HashUtil;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class UserTranslationDetector {
@@ -39,7 +40,7 @@ public class UserTranslationDetector {
                 continue;
             }
 
-            Map<String, String> existingLang = existingLangFiles.getOrDefault(modId, Map.of());
+            Map<String, String> existingLang = existingLangFiles.getOrDefault(modId, Collections.emptyMap());
 
             for (Map.Entry<String, PackedEntry> packedKeyEntry : packedMod.getEntries().entrySet()) {
                 String key = packedKeyEntry.getKey();

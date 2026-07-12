@@ -13,6 +13,7 @@ import com.mmt.core.translate.ai.AiFileParser;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class AiAutoTranslator implements ITranslator {
             logger.info("Processing chunk " + (i + 1) + "/" + chunks.size() + " (" + chunk.getCharCount() + " chars)");
 
             try {
-                String requestBody = requestBuilder.buildAiAutoRequest(SYSTEM_PROMPT, List.of(chunk), config.getApiModel());
+                String requestBody = requestBuilder.buildAiAutoRequest(SYSTEM_PROMPT, Collections.singletonList(chunk), config.getApiModel());
 
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Bearer " + config.getApiKey());
