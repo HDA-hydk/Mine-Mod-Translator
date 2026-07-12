@@ -6,6 +6,10 @@
 
 # Mine Mod Translator (MMT)
 
+> 📣 **Join our QQ Group for testing & feedback! Group ID: `1058830118`** 🎮
+>
+> The project is still in development. We need your feedback and suggestions to improve it.
+
 A Minecraft mod translation tool supporting multiple loaders (Forge / Fabric / NeoForge), providing an integrated extract-translate-pack pipeline for mod localization.
 
 ## Features
